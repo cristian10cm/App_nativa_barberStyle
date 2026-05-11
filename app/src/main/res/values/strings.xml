@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">App_native_store</string>
+    <string name="ingresar_login">Ingresar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="completar">Completar</string>
+    <string name="confirmada">Confirmada</string>
+    <string name="rechazar">Rechazar</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="pendiente">Pendiente</string>
+    <string name="eliminar">Eliminar</string>
+</resources>
