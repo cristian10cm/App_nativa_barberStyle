@@ -155,7 +155,7 @@ El proyecto está desarrollado siguiendo:
 
 # Autor
 
-Proyecto desarrollado por Cruz Z.
+Proyecto desarrollado por Cristhian Cruz.
 
 
 
