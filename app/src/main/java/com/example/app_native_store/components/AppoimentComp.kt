@@ -11,11 +11,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.app_native_store.R
-import com.example.app_native_store.types.AppointmentType
 
 @Composable
-fun AppointmentComp(appoinment: AppointmentType, onDelete:(id:String)-> Unit) {
+fun AppointmentComp(
+    appointment: Appointment,
+    onDelete: (id: String) -> Unit,
+    onRate: (id: String, score: Int) -> Unit
+) {
     var rating by remember { mutableStateOf(0) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -23,83 +27,58 @@ fun AppointmentComp(appoinment: AppointmentType, onDelete:(id:String)-> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = MaterialTheme.shapes.medium
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
+            Text(text = appointment.service, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "${appointment.date} - ${appointment.time}", fontSize = 13.sp)
+            Text(text = appointment.address, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-            Text(
-                text = appoinment.storeName,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+            appointment.comment?.let {
+                Text(text = it, fontSize = 12.sp)
+            }
 
-            Text(
-                text = appoinment.service,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Text(
-                text = "${appoinment.date} - ${appoinment.time}",
-                fontSize = 13.sp
-            )
-
-            Text(
-                text = appoinment.address,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Surface(
-                    color = when (appoinment.status.lowercase()) {
-                        "pendiente" -> MaterialTheme.colorScheme.tertiaryContainer
-                        "confirmada" -> MaterialTheme.colorScheme.primaryContainer
-                        "completada" -> MaterialTheme.colorScheme.secondaryContainer
-                        else -> MaterialTheme.colorScheme.surfaceVariant
+                    color = when (appointment.status.lowercase()) {
+                        stringResource(R.string.pendiente)  -> MaterialTheme.colorScheme.tertiaryContainer
+                        stringResource(R.string.confirmada) -> MaterialTheme.colorScheme.primaryContainer
+                        stringResource(R.string.completada) -> MaterialTheme.colorScheme.secondaryContainer
+                        else         -> MaterialTheme.colorScheme.surfaceVariant
                     },
                     shape = MaterialTheme.shapes.small
                 ) {
                     Text(
-                        text = appoinment.status,
+                        text = appointment.status,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium
                     )
                 }
             }
-            if(appoinment.status == "Pendiente"){
-                Row() {
-                    ButtonComponent (
-                        onClick = {onDelete(appoinment.id)},
-                        textBtn = stringResource(R.string.eliminar)
+
+            if (appointment.status.lowercase() in listOf( stringResource(R.string.pendiente),  stringResource(R.string.confirmada))) {
+                ButtonComponent(
+                    onClick = { onDelete(appointment.id) },
+                    textBtn = if (appointment.status.lowercase() ==  stringResource(R.string.pendiente))  stringResource(R.string.eliminar) else stringResource(
+                        R.string.cancelar_cita
                     )
-                }
-            }else if (appoinment.status == "Confirmada"){
-                Row() {
-                    ButtonComponent (
-                        onClick = {onDelete(appoinment.id)},
-                        textBtn = "Cancelar cita"
-                    )
-                }
+                )
             }
-            if(appoinment.score !== null  && appoinment.status == "Completada"){
-                ScoreFixed(
-                    rating = appoinment.score?.toInt() ?: 0
-                )
-            }else if(appoinment.score == null && appoinment.status == "Completada"){
-                RatingStars(
-                    rating = rating,
-                    onRatingChange = { newRating ->
-                        rating = newRating
-                        NewScore(id = appoinment.id,rating)
-                    }
-                )
+
+            if (appointment.status.lowercase() ==  stringResource(R.string.completada)) {
+                if (appointment.score != null) {
+                    ScoreFixed(rating = appointment.score.toInt())
+                } else {
+                    RatingStars(
+                        rating = rating,
+                        onRatingChange = { newRating ->
+                            rating = newRating
+                            onRate(appointment.id, newRating)
+                        }
+                    )
+                }
             }
         }
     }

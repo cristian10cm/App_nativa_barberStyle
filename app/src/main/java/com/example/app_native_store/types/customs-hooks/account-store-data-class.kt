@@ -1,0 +1,22 @@
+data class AccountStoreHook(
+    val usuario: Usuario?,
+    val nombre: String,
+    val telefono: String,
+    val ciudad: String,
+    val edit: Boolean,
+    val guardando: Boolean,
+    val editClave: Boolean,
+    val claveActual: String,
+    val nuevaClave: String,
+    val claveIncorrecta: Boolean,
+    val guardandoClave: Boolean,
+    val cargando: Boolean,
+    val errorMsg: String?,
+    val onNombreChange: (String) -> Unit,
+    val onTelefonoChange: (String) -> Unit,
+    val onCiudadChange: (String) -> Unit,
+    val onClaveActualChange: (String) -> Unit,
+    val onNuevaClaveChange: (String) -> Unit,
+    val onEditarGuardar: () -> Unit,
+    val onCambiarClave: () -> Unit
+)

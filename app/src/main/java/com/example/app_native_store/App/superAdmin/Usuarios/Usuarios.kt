@@ -1,56 +1,35 @@
-import android.content.ClipData
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.app_native_store.R
 import com.example.app_native_store.ui.components.FilterChips
 
 @Composable
+fun Usuarios(navController: NavController) {
+    val h = useUsuarios(navController)
 
-fun Usuarios(navController: NavController){
-    var selectedType by remember { mutableStateOf<String?>(null) }
-    val allTypes = listOf(
-        "Usuarios", "Tiendas","Todos"
-    )
-    val filteredUser = if (selectedType == null || selectedType == "Todos") {
-        UserList
-    } else {
-        if(selectedType == "Usuarios"){
-            UserList.filter { it.rol == "user" }
-        }else{
-            UserList.filter { it.rol == "store" }
-        }
+    Column(modifier = Modifier.fillMaxSize()) {
+        Header(stringResource(R.string.usuarios))
 
-    }
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Header("Agenda de citas")
+        h.error?.let { Text(text = it, color = Color.Red) }
 
         FilterChips(
-            types = allTypes,
-            selectedType = selectedType,
-            onTypeSelected = { selectedType = it }
+            types = h.allTypes,
+            selectedType = h.selectedType,
+            onTypeSelected = h.onTypeSelected
         )
-        LazyColumn() {
-                items(filteredUser){
-                    app->
-                        UserComp(
-                            user = app,
-                            onEdit =  { id ->
-                                navController.navigate("verUsuarios/$id")
-                            }
-                        )
-                }
-        }
 
+        LazyColumn {
+            items(h.filteredUsers) { user ->
+                UserComp(user = user, onEdit = h.onEdit)
+            }
+        }
     }
 }

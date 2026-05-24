@@ -2,61 +2,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.example.app_native_store.data.appointmentsList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.example.app_native_store.R
 import com.example.app_native_store.ui.components.FilterChips
-
 
 @Composable
 fun AgendaStore() {
-
-    var selectedType by remember { mutableStateOf<String?>(null) }
-
-    var appointments by remember {
-        mutableStateOf(appointmentsList.toMutableList())
-    }
-
-    val allTypes = listOf(
-        "Confirmada", "Pendiente", "Completada", "Rechazada", "Cancelada", "Todas"
-    )
-
-    fun updateAppointmentStatus(id: String, newStatus: String) {
-        appointments = appointments.map { app ->
-            if (app.id == id) {
-                app.copy(status = newStatus)
-            } else app
-        }.toMutableList()
-    }
-
-    val filteredAppointments = if (selectedType == null || selectedType == "Todas") {
-        appointments
-    } else {
-        appointments.filter { it.status == selectedType }
-    }
+    val hook = useAgendaStore()
 
     Column(modifier = Modifier.fillMaxWidth()) {
+        Header(stringResource(R.string.tu_agenda_de_citas))
 
-        Header("Agenda de citas")
+        hook.error?.let { Text(text = it, color = Color.Red) }
 
         FilterChips(
-            types = allTypes,
-            selectedType = selectedType,
-            onTypeSelected = { selectedType = it }
+            types = hook.allTypes,
+            selectedType = hook.selectedType,
+            onTypeSelected = hook.onTypeSelected
         )
 
         LazyColumn {
-            items(filteredAppointments) { app ->
-
+            items(hook.filteredAppointments) { app ->
                 AppointmentCompStore(
-                    app,
-                    onChangeStatus = { id, newStatus ->
-                        updateAppointmentStatus(id, newStatus)
-                    }
+                    appointment = app,
+                    onChangeStatus = { id, newStatus -> hook.changeStatus(id, newStatus) }
                 )
             }
         }

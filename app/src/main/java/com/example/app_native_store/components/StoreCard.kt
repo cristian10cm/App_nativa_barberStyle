@@ -1,6 +1,4 @@
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,41 +21,37 @@ import androidx.compose.ui.unit.sp
 import com.example.app_native_store.R
 
 @Composable
-
-fun StoreCard(store:StoreType
-){
+fun StoreCard(store: Store) {
     Row(
         modifier = Modifier
             .padding(5.dp)
-            .fillMaxWidth()
-
-        ,
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         Column(
             modifier = Modifier
                 .weight(1f)
-
                 .padding(end = 12.dp)
         ) {
-
             Text(
                 text = store.name,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Text(
-                text = store.description,
-                fontSize = 14.sp
-            )
+
+            store.description?.let {
+                Text(text = it, fontSize = 14.sp)
+            }
+
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = "Cel. ${store.phone}",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
+            store.phone?.let {
+                Text(
+                    text = "Cel. $it",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
 
             Spacer(modifier = Modifier.height(4.dp))
 

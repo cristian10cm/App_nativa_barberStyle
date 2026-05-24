@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.app_native_store.ui.Account
+import com.example.app_native_store.ui.Agendar
 
 @Composable
 fun RouterUser(){
@@ -21,7 +23,7 @@ fun RouterUser(){
             startDestination = "storesList",
             modifier = Modifier.padding(padding)
         ) {
-            composable("account") { AccountUser() }
+            composable("account") { Account() }
             composable("storesList"){Stores(navController)}
 
             composable("agendar/{id}") { backStackEntry ->

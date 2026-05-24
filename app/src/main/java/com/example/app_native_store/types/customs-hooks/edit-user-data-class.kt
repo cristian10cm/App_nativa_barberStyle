@@ -1,0 +1,21 @@
+data class EditUserHook(
+    val usuario: Usuario?,
+    val error: String?,
+    val loading: Boolean,
+    val edit: Boolean,
+    val nombre: String,
+    val telefono: String,
+    val genero: String,
+    val edad: String,
+    val descripcion: String,
+    val ciudad: String,
+    val nuevaClave: String,
+    val onNombreChange: (String) -> Unit,
+    val onTelefonoChange: (String) -> Unit,
+    val onGeneroChange: (String) -> Unit,
+    val onEdadChange: (String) -> Unit,
+    val onDescripcionChange: (String) -> Unit,
+    val onCiudadChange: (String) -> Unit,
+    val onNuevaClaveChange: (String) -> Unit,
+    val onEditarGuardar: (String) -> Unit
+)

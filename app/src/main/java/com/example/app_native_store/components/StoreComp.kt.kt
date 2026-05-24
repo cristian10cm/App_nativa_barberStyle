@@ -14,11 +14,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.app_native_store.R
+import com.google.gson.annotations.SerializedName
+
 
 @Composable
 fun StoreComp(
-    store: StoreType,
-    onClick: (Int) -> Unit
+    store: Store,
+    onClick: (String) -> Unit
 ) {
 
     Card(

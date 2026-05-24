@@ -13,9 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @Composable
 fun UserComp(
-    user: UsuarioType,
+    user: Usuario,
     onEdit: (id: String) -> Unit
 ) {
     Card(
@@ -25,44 +26,24 @@ fun UserComp(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = MaterialTheme.shapes.medium
     ) {
-
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
+            Text(text = user.nombre, fontSize = 16.sp, fontWeight = FontWeight.Bold)
 
-            Text(
-                text = user.nombre,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text(text = "Rol: ${user.rol}", fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
 
-            Text(
-                text = "Rol: ${user.rol}",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Text(text = user.correo, fontSize = 13.sp)
 
-            Text(
-                text = user.correo,
-                fontSize = 13.sp
-            )
+            user.telefono?.let {
+                Text(text = it, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
 
-            Text(
-                text = user.telefono,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 ButtonComponent(
                     textBtn = "Editar",
-                    onClick = {
-                        onEdit(user.id)
-                    }
+                    onClick = { onEdit(user.id) }
                 )
             }
         }

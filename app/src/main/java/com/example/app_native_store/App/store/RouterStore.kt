@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.app_native_store.ui.Account
+import com.example.app_native_store.ui.Tienda
 
 
 @Composable
@@ -23,8 +25,8 @@ fun RouterStore(){
             modifier = Modifier.padding(padding)
         ) {
             composable("agenda") { AgendaStore() }
-            composable("account"){AccountStore()}
-            composable("tiendaAccount"){Tienda()}
+            composable("account"){ Account() }
+            composable("tiendaAccount"){ Tienda() }
         }
     }
 }

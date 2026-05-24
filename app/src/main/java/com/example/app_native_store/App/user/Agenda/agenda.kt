@@ -2,48 +2,35 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.example.app_native_store.data.appointmentsList
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.example.app_native_store.R
 import com.example.app_native_store.ui.components.FilterChips
 
 @Composable
+fun AgendaUser() {
+    val h = useAgendaUser()
 
-fun AgendaUser(){
-    var selectedType by remember { mutableStateOf<String?>(null) }
-    val allTypes = listOf(
-        "Confirmada", "Pendiente", "Completada", "Rechazada", "Cancelada", "Todas"
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Header( stringResource(R.string.agenda_de_citas))
 
-    val filteredAppointments = if (selectedType == null || selectedType == "Todas") {
-        appointmentsList
-    } else {
-        appointmentsList.filter { app ->
-            app.status == selectedType
-        }
-    }
+        h.error?.let { Text(text = it, color = Color.Red) }
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Header("Agenda de citas")
         FilterChips(
-            types = allTypes,
-            selectedType = selectedType,
-            onTypeSelected = { selectedType = it }
+            types = h.allTypes,
+            selectedType = h.selectedType,
+            onTypeSelected = h.onTypeSelected
         )
-        LazyColumn()  {
-            items(filteredAppointments){
-                    app->
-                AppointmentComp (
-                    app,
-                    onDelete = {
-                        removeAppointment(app)
-                    }
+
+        LazyColumn {
+            items(h.filteredAppointments) { app ->
+                AppointmentComp(
+                    appointment = app,
+                    onDelete = h.onDelete,
+                    onRate = h.onRate
                 )
             }
         }
